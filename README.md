@@ -354,9 +354,9 @@ SW2# write memory
 
 ## 8. Video Demostrativo
 
-🎥 **[Ver demostración en YouTube](https://youtube.com/enlace_aqui)**
+🎥 **[Ver demostración en YouTube](https://youtu.be/LRRnX42GReQ)**
 
-**Duración:** X:XX minutos
+**Duración:** 4:42
 
 **Contenido del video:**
 - ✅ Topología visible con nombre y matrícula
